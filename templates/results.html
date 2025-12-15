@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Detected APIs</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .api-block {
+            padding: 12px; margin: 10px 0; border: 1px solid #ddd;
+            background: #f9f9f9; border-radius: 6px;
+        }
+        .api-url { word-break: break-all; font-weight: bold; }
+        form.inline { display: inline-block; margin-left: 8px; }
+        button { padding: 6px 10px; border-radius: 4px; border: none; cursor: pointer; }
+        .resp { background: #007bff; color: white; }
+        .ext { background: #28a745; color: white; }
+        .meta { color: #666; font-size: 13px; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+<h2>Detected JSON APIs</h2>
+<p class="meta"><b>Site scanned:</b> {{ site }}</p>
+
+{% if apis %}
+    {% for api in apis %}
+    <div class="api-block">
+        <div class="api-url">{{ api.url }}</div>
+        <div class="meta">Method: {{ api.method }} &nbsp; | &nbsp; Status: {{ api.status }}</div>
+
+        <form class="inline" action="/response" method="POST">
+            <input type="hidden" name="api_url" value="{{ api.url }}">
+            <button class="resp" type="submit">Response</button>
+        </form>
+
+        <form class="inline" action="/choose-extract-mode" method="POST">
+            <input type="hidden" name="api_url" value="{{ api.url }}">
+            <button type="submit">Extract</button>
+        </form>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No JSON APIs detected on this page.</p>
+{% endif %}
+
+<br>
+<a href="/">⬅ Back to URL Page</a>
+
+
+</body>
+</html>

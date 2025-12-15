@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Generated Mapping</title>
+
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        pre {
+            background: #111;
+            color: #00ff90;
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+        button {
+            background: #00aa55;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Generated Mapping</h2>
+
+
+<pre id="mappingBox">{{ mapping | safe }}</pre>
+
+<form id="saveForm" action="/save-mapping" method="POST">
+
+  
+    <input type="hidden" name="api_url" value="{{ api_url }}">
+    <input type="hidden" name="mode" value="{{ mode }}">
+    <input type="hidden" name="keys" value="{{ keys }}">
+    <input type="hidden" name="mapping" id="mappingInput">
+
+    <button type="submit">💾 Save Mapping to Database</button>
+</form>
+
+<script>
+   
+    let jsonText = document.getElementById("mappingBox").innerText.trim();
+    document.getElementById("mappingInput").value = jsonText;
+</script>
+
+<a href="/results">⬅ Back</a>
+
+</body>
+</html>

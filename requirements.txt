@@ -1,0 +1,8 @@
+flask
+flask-wtf
+playwright
+requests
+beautifulsoup4
+lxml
+SQLAlchemy
+psycopg2-binary

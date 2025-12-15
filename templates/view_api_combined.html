@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Saved Mappings</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #222;
+            color: #fff;
+        }
+        tr:hover {
+            background: #eee;
+            cursor: pointer;
+        }
+
+        pre {
+            background: #111;
+            color: #00ff90;
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+
+        .title {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2 class="title">Saved Mappings for API: {{ api.api }}</h2>
+
+<table>
+    <tr>
+        <th>Mode</th>
+        <th>Keys</th>
+    </tr>
+
+    {% for d in data_rows %}
+    <tr onclick="loadMapping({{ d.id }})">
+        <td>{{ d.mode }}</td>
+        <td>{{ d.keys }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3 id="mapTitle" style="display:none;">Mapping Output</h3>
+<pre id="mappingBox" style="display:none;"></pre>
+
+<br>
+<a href="/saved-apis">⬅ Back to Saved APIs</a>
+
+<script>
+function loadMapping(dataId) {
+    fetch(`/get-mapping/${dataId}`)
+        .then(res => res.json())
+        .then(obj => {
+            document.getElementById("mapTitle").style.display = "block";
+
+            const pretty = JSON.stringify(obj.mapping, null, 2);
+
+            document.getElementById("mappingBox").innerText = 
+                "Mode: " + obj.mode + "\n\n" +
+                "Keys: " + JSON.stringify(obj.keys, null, 2) + "\n\n" +
+                "Mapping:\n" + pretty;
+
+            document.getElementById("mappingBox").style.display = "block";
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Failed to load mapping");
+        });
+}
+</script>
+
+</body>
+</html>

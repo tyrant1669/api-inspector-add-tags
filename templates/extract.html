@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Extracted Array Keys</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #444; padding: 8px; text-align: left; }
+        th { background: #4F80FF; color: white; }
+        a { font-weight: bold; color: #4F00FF; text-decoration: none; }
+
+       
+        #mappingBox {
+            display: none;
+            border: 2px solid #4F80FF;
+            padding: 20px;
+            margin-top: 20px;
+            background: #F5F7FF;
+            width: 350px;
+        }
+
+        select {
+            padding: 5px;
+            width: 100%;
+        }
+
+        button {
+            padding: 8px 14px;
+            background: #4F80FF;
+            color: white;
+            border: none;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function showMappingBox() {
+            document.getElementById("mappingBox").style.display = "block";
+        }
+    </script>
+</head>
+<body>
+
+<h2>Extracted Array Keys</h2>
+<p><b>API:</b> {{ api_url }}</p>
+
+{% if arrays %}
+
+{% set ns = namespace(max=0) %}
+{% for name, keys in arrays.items() %}
+    {% if keys|length > ns.max %}
+        {% set ns.max = keys|length %}
+    {% endif %}
+{% endfor %}
+
+<table>
+    <tr>
+        <th>Array Name</th>
+        {% for i in range(ns.max) %}
+            <th>Key {{ i+1 }}</th>
+        {% endfor %}
+    </tr>
+
+    {% for name, keys in arrays.items() %}
+    <tr>
+        <td>{{ name }}</td>
+        {% for i in range(ns.max) %}
+            <td>{{ keys[i] if i < keys|length else '' }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+
+
+<button onclick="showMappingBox()">Generate Mapping</button>
+
+<div id="mappingBox">
+    <h3>Select Main Array for Mapping</h3>
+
+    <form action="/generate-mapping" method="POST">
+        <input type="hidden" name="api_url" value="{{ api_url }}">
+
+        <label>Select Array:</label>
+        <select name="selected_array">
+            {% for name, keys in arrays.items() %}
+                <option value="{{ name }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Proceed</button>
+    </form>
+</div>
+
+{% else %}
+<p>No arrays found.</p>
+{% endif %}
+
+<br>
+<a href="/results">⬅ Back to API List</a>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>API JSON Inspector</title>
+  <style>
+    body { font-family: Arial; margin-top: 60px; text-align: center; }
+    .btn {
+      display: inline-block;
+      padding: 12px 23px;
+      font-size: 18px;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      margin: 10px;
+      background: #007bff;
+    }
+    .btn:hover { background: #005ec2; }
+  </style>
+</head>
+<body>
+  <h1>🌐 API JSON Inspector</h1>
+  <p>Select Input Method</p>
+  <div style="margin: 20px 0; text-align: center;">
+    <a class="btn" href="{{ url_for('add_tags') }}" style="margin: 0 5px;">Add Tags</a>
+    <a class="btn" href="/url-mode" style="margin: 0 5px;">Page URL</a>
+    <a class="btn" href="/header-mode" style="margin: 0 5px;">API URL</a>
+  </div>
+  <div style="margin-top: 20px;">
+    <a href="{{ url_for('saved_apis') }}" class="btn" style="background: #4F80FF; margin: 0 5px;">
+      View Saved APIs
+    </a>
+  </div>
+
+</body>
+</html>

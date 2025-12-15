@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% block title %}Add/Edit Tags{% endblock %}
+
+{% block head %}
+{{ super() }}
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+.select2-container--default .select2-selection--single {
+    height: 42px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 40px;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 26px;
+    padding-left: 0;
+}
+.select2-container--default .select2-selection--single:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Initialize Select2
+    $('#tag_name').select2({
+        placeholder: 'Search or select a tag',
+        allowClear: true,
+        width: '100%',
+        dropdownAutoWidth: true,
+        theme: 'default'
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Add/Edit API Tags</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} flash-message flash-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<style>
+/* Add this to your existing style block */
+.flash-message {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+.flash-error {
+    background: #f8d7da;
+    color: #721c24;
+}
+.flash-success {
+    background: #d4edda;
+    color: #155724;
+}
+</style>
+    
+    <form method="POST" class="tag-form">
+        <div class="form-group">
+            <label for="api_url">API URL:</label>
+            <input type="text" id="api_url" name="api_url" class="form-control" required 
+                   value="{{ request.form.get('api_url', '') }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="tag_name">Select Tag:</label>
+            <select name="tag_name" id="tag_name" class="form-control" required>
+                <option value="">-- Select a tag --</option>
+                <option value="APM Insight">APM Insight</option>
+                <option value="Web RUM">Web RUM</option>
+                <option value="Mobile APM">Mobile APM</option>
+                <option value="OpenTelemetry">OpenTelemetry</option>
+                <option value="OpenAI">OpenAI</option>
+                {% if all_tags %}
+                    {% for tag in all_tags %}
+                        {% if tag.name not in ['APM Insight', 'Web RUM', 'Mobile APM', 'OpenTelemetry', 'OpenAI'] %}
+                            <option value="{{ tag.name }}">{{ tag.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Save Tag
+            </button>
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+<style>
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn i {
+    font-size: 14px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.form-actions {
+    margin-top: 25px;
+    text-align: center;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.alert {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 15px;
+    gap: 5px;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}
