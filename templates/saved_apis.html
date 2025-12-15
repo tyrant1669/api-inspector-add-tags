@@ -204,7 +204,7 @@
                       text-decoration: none;">
                 All ({{ total_apis }})
             </a>
-            {% for tag in tags %}
+            {% for tag, count in all_tags_with_counts %}
             <a href="{{ url_for('saved_apis', tag=tag.name) }}" 
                style="display: inline-block; 
                       padding: 4px 12px; 
@@ -212,7 +212,7 @@
                       border-radius: 15px; 
                       font-size: 0.9em; 
                       text-decoration: none;">
-                {{ tag.name }} ({{ tag.count }})
+                {{ tag.name }} ({{ count }})
             </a>
             {% endfor %}
         </div>
@@ -241,7 +241,7 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <select name="tag_id" class="tag-select" style="min-width: 200px;" required>
                         <option value="">Select a tag...</option>
-                        {% for tag in tags %}
+                        {% for tag in all_tags %}
                             <option value="{{ tag.id }}"
                                 {% if api.tag and tag.id == api.tag.id %}selected{% endif %}>
                                 {{ tag.name }}

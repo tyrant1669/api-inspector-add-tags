@@ -473,7 +473,7 @@ def saved_apis():
         return render_template(
             'saved_apis.html', 
             apis=apis,
-            tags=all_tags,  # Pass all tags for dropdowns
+            all_tags=all_tags,  # Pass all tags for dropdowns
             all_tags_with_counts=all_tags_with_counts,
             total_apis=total_apis,
             current_tag=tag_filter,
